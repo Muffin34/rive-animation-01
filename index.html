@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guy on Phone - Interactive</title>
+  <script src="https://unpkg.com/@rive-app/webgl"></script>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    canvas {
+      width: 1024px;
+      height: 1024px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="rive-canvas" width="1024" height="1024"></canvas>
+
+  <script>
+    new rive.Rive({
+      src: "guy_onphone.riv",
+      canvas: document.getElementById("rive-canvas"),
+      autoplay: true,
+      stateMachines: ["State Machine 1"] // <- Must match exactly your state machine name in Rive
+    });
+  </script>
+</body>
+</html>
