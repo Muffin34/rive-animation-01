@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Explore Button - Rive Interaction</title>
+  <script src="https://unpkg.com/@rive-app/webgl"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      max-width: 600px;
+      max-height: 600px;
+      aspect-ratio: 1 / 1;
+      background: transparent;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="rive-canvas" width="1024" height="1024"></canvas>
+
+  <script>
+    let riveInstance;
+
+    // Initialize Rive
+    riveInstance = new rive.Rive({
+      src: "explore_button.riv",
+      canvas: document.getElementById("rive-canvas"),
+      autoplay: true,
+      stateMachines: ["State Machine 1"], // Make sure this matches your actual state machine name
+      onLoad: () => {
+        console.log("Rive loaded");
+
+        // Access inputs
+        const inputs = riveInstance.stateMachineInputs("State Machine 1");
+
+        // 🔍 You can log these to see all input names
+        console.log("Inputs:", inputs.map(i => i.name));
+
+        // Example: fire a trigger
+        const triggerInput = inputs.find(i => i.name === "Pressed");
+        if (triggerInput && triggerInput.type === "trigger") {
+          // Automatically fire the trigger after 1 second
+          setTimeout(() => {
+            triggerInput.fire();
+          }, 1000);
+        }
+
+        // Example: toggle a boolean
+        const hoverBool = inputs.find(i => i.name === "Hovered");
+        if (hoverBool && hoverBool.type === "boolean") {
+          // Toggle on hover
+          const canvas = document.getElementById("rive-canvas");
+          canvas.addEventListener("mouseenter", () => {
+            hoverBool.value = true;
+          });
+          canvas.addEventListener("mouseleave", () => {
+            hoverBool.value = false;
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
 
