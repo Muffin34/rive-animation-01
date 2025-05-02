@@ -3,36 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>cbutton - Rive</title>
+  <title>cbutton</title>
   <script src="https://unpkg.com/@rive-app/webgl"></script>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      overflow: hidden;
     }
     canvas {
-      width: 500px;
-      height: 500px;
       display: block;
-      background: transparent;
+      width: 100vw;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
-  <canvas id="riveCanvas" width="500" height="500"></canvas>
+  <canvas id="riveCanvas"></canvas>
 
   <script>
     const riveInstance = new rive.Rive({
       src: 'cbutton.riv',
       canvas: document.getElementById('riveCanvas'),
       autoplay: true,
-      stateMachines: ['State Machine 1'], // Change to your actual state machine name
-      artboard: 'Main', // Change if your artboard is named differently
+      stateMachines: ['State Machine 1'], // 🔁 Replace if your state machine is named differently
+      artboard: 'Main', // Optional — if you're using a specific artboard
       onLoad: () => {
         const inputs = riveInstance.stateMachineInputs('State Machine 1');
 
