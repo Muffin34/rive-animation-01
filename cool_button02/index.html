@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rive Button - cbutton</title>
+  <script src="https://unpkg.com/@rive-app/webgl"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="riveCanvas"></canvas>
+
+  <script>
+    const rive = new rive.Rive({
+      src: 'cbutton.riv',
+      canvas: document.getElementById('riveCanvas'),
+      autoplay: true,
+      stateMachines: ['State Machine 1'], // Change to your actual state machine name
+      artboard: 'Main', // Optional: specify if multiple artboards
+      onLoad: () => {
+        const inputs = rive.stateMachineInputs('State Machine 1');
+        
+        // Example triggers or booleans
+        const pressTrigger = inputs.find(input => input.name === "pressed");
+        const toggleBoolean = inputs.find(input => input.name === "isOn");
+
+        rive.canvas.addEventListener('click', () => {
+          if (pressTrigger && pressTrigger.fire) pressTrigger.fire();
+          if (toggleBoolean) toggleBoolean.value = !toggleBoolean.value;
+        });
+      },
+    });
+  </script>
+</body>
+</html>
