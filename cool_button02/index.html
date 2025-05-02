@@ -3,38 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rive Button - cbutton</title>
+  <title>cbutton - Rive</title>
   <script src="https://unpkg.com/@rive-app/webgl"></script>
   <style>
-    html, body {
+    body {
       margin: 0;
       padding: 0;
       background: transparent;
-      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
     canvas {
+      width: 500px;
+      height: 500px;
       display: block;
+      background: transparent;
     }
   </style>
 </head>
 <body>
-  <canvas id="riveCanvas"></canvas>
+  <canvas id="riveCanvas" width="500" height="500"></canvas>
 
   <script>
-    const rive = new rive.Rive({
+    const riveInstance = new rive.Rive({
       src: 'cbutton.riv',
       canvas: document.getElementById('riveCanvas'),
       autoplay: true,
       stateMachines: ['State Machine 1'], // Change to your actual state machine name
-      artboard: 'Main', // Optional: specify if multiple artboards
+      artboard: 'Main', // Change if your artboard is named differently
       onLoad: () => {
-        const inputs = rive.stateMachineInputs('State Machine 1');
-        
-        // Example triggers or booleans
+        const inputs = riveInstance.stateMachineInputs('State Machine 1');
+
         const pressTrigger = inputs.find(input => input.name === "pressed");
         const toggleBoolean = inputs.find(input => input.name === "isOn");
 
-        rive.canvas.addEventListener('click', () => {
+        riveInstance.canvas.addEventListener('click', () => {
           if (pressTrigger && pressTrigger.fire) pressTrigger.fire();
           if (toggleBoolean) toggleBoolean.value = !toggleBoolean.value;
         });
