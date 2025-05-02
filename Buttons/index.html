@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Kbar Button - Rive Interaction</title>
-  <script src="https://unpkg.com/@rive-app/webgl"></script>
+  <title>Kbar Button with Sound</title>
+  <!-- ✅ Use CanvasKit runtime for sound support -->
+  <script src="https://unpkg.com/@rive-app/canvas"></script>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: transparent;              /* ✅ Transparent page background */
+      background: transparent;              /* ✅ Transparent background */
       width: 100%;
       height: 100%;
       overflow: hidden;
@@ -33,42 +34,39 @@
 
   <script>
     const riveInstance = new rive.Rive({
-      src: "kbar_button.riv", // ✅ Make sure this is in the same folder
+      src: "kbar_button.riv", // ✅ Make sure the file is in the same folder
       canvas: document.getElementById("rive-canvas"),
       autoplay: true,
-      stateMachines: ["State Machine 1"], // ✅ Match your actual state machine name
+      useOffscreenRenderer: false, // ✅ Must be false for sound to work
+      stateMachines: ["State Machine 1"], // ✅ Match the exact name used in Rive
       onLoad: () => {
-        console.log("Rive file loaded");
+        console.log("Kbar Button Rive file loaded with sound");
 
-        // 🎛 Access inputs
         const inputs = riveInstance.stateMachineInputs("State Machine 1");
+        console.log("Inputs:", inputs.map(i => `${i.name} (${i.type})`));
 
-        // 🔍 Log input names for dev help
-        console.log("Inputs:", inputs.map(input => `${input.name} (${input.type})`));
-
-        // ✅ EXAMPLE: Trigger input named "Pressed"
-        const pressedTrigger = inputs.find(input => input.name === "Pressed");
-        if (pressedTrigger && pressedTrigger.type === "trigger") {
-          // Fire trigger on click
+        // ✅ Trigger input (e.g., "Pressed")
+        const trigger = inputs.find(i => i.name === "Pressed");
+        if (trigger && trigger.type === "trigger") {
           document.getElementById("rive-canvas").addEventListener("click", () => {
-            pressedTrigger.fire();
+            trigger.fire();
           });
         }
 
-        // ✅ EXAMPLE: Boolean "Hover" (toggle on hover)
-        const hoverBool = inputs.find(input => input.name === "Hover");
-        if (hoverBool && hoverBool.type === "boolean") {
-          const canvas = document.getElementById("rive-canvas");
-          canvas.addEventListener("mouseenter", () => hoverBool.value = true);
-          canvas.addEventListener("mouseleave", () => hoverBool.value = false);
-        }
-
-        // ✅ EXAMPLE: Boolean "Active" (toggle on click)
-        const activeBool = inputs.find(input => input.name === "Active");
+        // ✅ Boolean (e.g., "Active")
+        const activeBool = inputs.find(i => i.name === "Active");
         if (activeBool && activeBool.type === "boolean") {
           document.getElementById("rive-canvas").addEventListener("click", () => {
             activeBool.value = !activeBool.value;
           });
+        }
+
+        // ✅ Hover Boolean (e.g., "Hover")
+        const hoverBool = inputs.find(i => i.name === "Hover");
+        if (hoverBool && hoverBool.type === "boolean") {
+          const canvas = document.getElementById("rive-canvas");
+          canvas.addEventListener("mouseenter", () => hoverBool.value = true);
+          canvas.addEventListener("mouseleave", () => hoverBool.value = false);
         }
       }
     });
