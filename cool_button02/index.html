@@ -3,40 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>cbutton</title>
+  <title>High Quality Glow Button</title>
   <script src="https://unpkg.com/@rive-app/webgl"></script>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: transparent;
       overflow: hidden;
+      background: transparent;
+      width: 100%;
+      height: 100%;
     }
     canvas {
       display: block;
-      width: 500px;
-      height: 500px;
+      width: 100%;
+      height: 100%;
       background: transparent;
     }
   </style>
 </head>
 <body>
-  <canvas id="riveCanvas" width="500" height="500" style="width: 500px; height: 500px;"></canvas>
+  <canvas id="riveCanvas" width="4096" height="4096"></canvas> <!-- Explicit high-res canvas -->
 
   <script>
+    const canvas = document.getElementById('riveCanvas');
+
+    // Optional: Match devicePixelRatio for crisp display
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = 4096 * dpr;
+    canvas.height = 4096 * dpr;
+    canvas.style.width = '4096px';
+    canvas.style.height = '4096px';
+
     const riveInstance = new rive.Rive({
       src: 'cool_button02.riv',
-      canvas: document.getElementById('riveCanvas'),
+      canvas: canvas,
       autoplay: true,
-      stateMachines: ['State Machine 1'], // 🔁 Replace if your state machine is named differently
-      artboard: 'Artboard', // Optional — if you're using a specific artboard
+      stateMachines: ['State Machine 1'], // Make sure this name matches exactly
+      artboard: 'Main', // Optional — match your artboard name
       onLoad: () => {
         const inputs = riveInstance.stateMachineInputs('State Machine 1');
-
         const pressTrigger = inputs.find(input => input.name === "pressed");
         const toggleBoolean = inputs.find(input => input.name === "isOn");
 
-        riveInstance.canvas.addEventListener('click', () => {
+        canvas.addEventListener('click', () => {
           if (pressTrigger && pressTrigger.fire) pressTrigger.fire();
           if (toggleBoolean) toggleBoolean.value = !toggleBoolean.value;
         });
