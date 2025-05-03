@@ -1,60 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>High Quality Glow Button</title>
+  <meta charset="UTF-8">
+  <title>Glow Button</title>
   <script src="https://unpkg.com/@rive-app/webgl"></script>
   <style>
     html, body {
       margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: transparent;
-      width: 100%;
+      background: #100022; /* Match Rive background */
       height: 100%;
+      overflow: hidden;
     }
     canvas {
       display: block;
-      width: 100%;
-      height: 100%;
-      background: transparent;
+      width: 100vw;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
-  <canvas id="riveCanvas" width="4096" height="4096"></canvas> <!-- Explicit high-res canvas -->
-
+  <canvas id="rive-canvas"></canvas>
   <script>
-    const canvas = document.getElementById('riveCanvas');
+    const canvas = document.getElementById("rive-canvas");
 
-    // Optional: Match devicePixelRatio for crisp display
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = 4096 * dpr;
-    canvas.height = 4096 * dpr;
-    canvas.style.width = '4096px';
-    canvas.style.height = '4096px';
+    // High resolution canvas scaling
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * scale;
+    canvas.height = window.innerHeight * scale;
 
-    const riveInstance = new rive.Rive({
-      src: 'cool_button02.riv',
+    // Visually stretch canvas to screen size
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+
+    new rive.Rive({
+      src: "cool_button02.riv", // Your Rive file name
       canvas: canvas,
       autoplay: true,
-      stateMachines: ['State Machine 1'], // Make sure this name matches exactly
-<<<<<<< HEAD
-      artboard: 'Main', // Optional — match your artboard name
-=======
-      artboard: 'Artboard', // Optional — match your artboard name
->>>>>>> 2ffebb9194b4ff5b0c56dd7a6105335c80c01af3
-      onLoad: () => {
-        const inputs = riveInstance.stateMachineInputs('State Machine 1');
-        const pressTrigger = inputs.find(input => input.name === "pressed");
-        const toggleBoolean = inputs.find(input => input.name === "isOn");
-
-        canvas.addEventListener('click', () => {
-          if (pressTrigger && pressTrigger.fire) pressTrigger.fire();
-          if (toggleBoolean) toggleBoolean.value = !toggleBoolean.value;
-        });
-      },
+      stateMachines: ["State Machine 1"], // Match exactly to your state machine name
+      fit: rive.Fit.Contain,
+      artboard: "Artboard" // ✅ Updated as you requested
     });
   </script>
 </body>
