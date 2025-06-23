@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rive Interactive</title>
+  <title>Rive Interactive Button</title>
   <style>
     html, body {
       margin: 0;
@@ -17,6 +17,9 @@
 
     #riveCanvas {
       display: block;
+      width: 100%;
+      max-width: 500px;
+      height: auto;
       cursor: pointer;
     }
   </style>
@@ -28,41 +31,22 @@
   <script>
     const canvas = document.getElementById("riveCanvas");
 
-    fetch('Liquid Button_01.riv')
-      .then(response => response.arrayBuffer())
-      .then(buffer => {
-        const file = rive.load(new Uint8Array(buffer));
-        const artboard = file.defaultArtboard();
-        const bounds = artboard.bounds;
-        const width = bounds.maxX - bounds.minX;
-        const height = bounds.maxY - bounds.minY;
+    const riveInstance = new rive.Rive({
+      src: "Liquid Button_01.riv", // 🔁 Just rename your file to this
+      canvas: canvas,
+      autoplay: true,
+      stateMachines: ["State Machine 1"], // 👈 Change this to your actual state machine name
+      onLoad: () => {
+        const inputs = riveInstance.stateMachineInputs("State Machine 1"); // 👈 Again, use your actual name
+        const hoverTrigger = inputs.find(input => input.name === "Hover" && input.type === "trigger");
 
-        canvas.width = width;
-        canvas.height = height;
-
-        const riveInstance = new rive.Rive({
-          buffer,
-          canvas,
-          autoplay: true,
-          stateMachines: ['State Machine 1'], // 👈 Rename this to your actual state machine name
-          onLoad: () => {
-            const inputs = riveInstance.stateMachineInputs('State Machine 1');
-
-            // Find a trigger input (e.g., "Hover")
-            const hoverTrigger = inputs.find(input => input.name === 'Hover' && input.type === 'trigger');
-
-            // Fire trigger on hover
-            if (hoverTrigger) {
-              canvas.addEventListener('mouseenter', () => {
-                hoverTrigger.fire();
-              });
-            }
-          }
-        });
-      })
-      .catch(err => {
-        console.error("Failed to load .riv file:", err);
-      });
+        if (hoverTrigger) {
+          canvas.addEventListener("mouseenter", () => {
+            hoverTrigger.fire();
+          });
+        }
+      }
+    });
   </script>
 </body>
 </html>
