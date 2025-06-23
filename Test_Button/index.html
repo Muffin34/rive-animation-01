@@ -16,9 +16,8 @@
     }
 
     #riveCanvas {
-      display: block;
       width: 100%;
-      max-width: 500px;
+      max-width: 400px;
       height: auto;
       cursor: pointer;
     }
@@ -32,12 +31,16 @@
     const canvas = document.getElementById("riveCanvas");
 
     const riveInstance = new rive.Rive({
-      src: "Liquid Button_01.riv", // 🔁 Just rename your file to this
+      src: "Liquid Button_01.riv", // your renamed file
       canvas: canvas,
       autoplay: true,
-      stateMachines: ["State Machine 1"], // 👈 Change this to your actual state machine name
+      stateMachines: ["State Machine 1"], // replace with actual state machine name
+      layout: new rive.Layout({
+        fit: rive.Fit.Contain,      // or Cover, Fill depending on need
+        alignment: rive.Alignment.Center,
+      }),
       onLoad: () => {
-        const inputs = riveInstance.stateMachineInputs("State Machine 1"); // 👈 Again, use your actual name
+        const inputs = riveInstance.stateMachineInputs("State Machine 1");
         const hoverTrigger = inputs.find(input => input.name === "Hover" && input.type === "trigger");
 
         if (hoverTrigger) {
