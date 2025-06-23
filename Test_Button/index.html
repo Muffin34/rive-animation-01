@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rive Interactive Button</title>
+  <title>Rive Button 1024</title>
   <style>
     html, body {
       margin: 0;
@@ -16,27 +16,26 @@
     }
 
     #riveCanvas {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
+      width: 1024px;
+      height: 1024px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <canvas id="riveCanvas"></canvas>
+  <canvas id="riveCanvas" width="1024" height="1024"></canvas>
 
   <script src="https://unpkg.com/@rive-app/canvas@2.11.1/rive.js"></script>
   <script>
     const canvas = document.getElementById("riveCanvas");
 
     const riveInstance = new rive.Rive({
-      src: "Liquid Button_01.riv", // your renamed file
+      src: "animation.riv", // rename your file to this
       canvas: canvas,
       autoplay: true,
-      stateMachines: ["State Machine 1"], // replace with actual state machine name
+      stateMachines: ["State Machine 1"], // 🔁 Replace with your state machine name
       layout: new rive.Layout({
-        fit: rive.Fit.Contain,      // or Cover, Fill depending on need
+        fit: rive.Fit.FitWidth,  // or Fill/Cover based on style
         alignment: rive.Alignment.Center,
       }),
       onLoad: () => {
