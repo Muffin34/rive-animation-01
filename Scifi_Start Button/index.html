@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Heartbeat Animation</title>
+  <title>Heartbeat Button</title>
   <style>
     html, body {
       margin: 0;
@@ -16,7 +16,7 @@
     }
 
     #riveCanvas {
-      width: 766px;
+      width: 500px;
       height: 500px;
       cursor: pointer;
     }
@@ -30,21 +30,21 @@
     const canvas = document.getElementById("riveCanvas");
 
     const riveInstance = new rive.Rive({
-      src: "heartbeat.riv", // 🔁 Make sure file is in the same folder
+      src: "heartbeat.riv",
       canvas: canvas,
       autoplay: true,
-      stateMachines: ["State Machine 1"], // 🧠 Replace with your actual state machine name
+      stateMachines: ["State Machine 1"],
       layout: new rive.Layout({
         fit: rive.Fit.Contain,
         alignment: rive.Alignment.Center,
       }),
       onLoad: () => {
-        const inputs = riveInstance.stateMachineInputs("State Machine 1"); // 🧠 Replace accordingly
-        const hoverTrigger = inputs.find(input => input.name === "Pulse" && input.type === "trigger"); // 🔁 Replace with your trigger input name
+        const inputs = riveInstance.stateMachineInputs("State Machine 1");
+        const pulseTrigger = inputs.find(input => input.name === "Pulse" && input.type === "trigger");
 
-        if (hoverTrigger) {
+        if (pulseTrigger) {
           canvas.addEventListener("mouseenter", () => {
-            hoverTrigger.fire();
+            pulseTrigger.fire();
           });
         }
       }
