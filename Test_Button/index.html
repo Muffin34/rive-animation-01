@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rive Button 1024</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #riveCanvas {
+      width: 1024px;
+      height: 1024px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="riveCanvas" width="1024" height="1024"></canvas>
+
+  <script src="https://unpkg.com/@rive-app/canvas@2.11.1/rive.js"></script>
+  <script>
+    const canvas = document.getElementById("riveCanvas");
+
+    const riveInstance = new rive.Rive({
+      src: "Liquid Button_01.riv", // rename your file to this
+      canvas: canvas,
+      autoplay: true,
+      stateMachines: ["State Machine 1"], // 🔁 Replace with your state machine name
+      layout: new rive.Layout({
+        fit: rive.Fit.FitWidth,  // or Fill/Cover based on style
+        alignment: rive.Alignment.Center,
+      }),
+      onLoad: () => {
+        const inputs = riveInstance.stateMachineInputs("State Machine 1");
+        const hoverTrigger = inputs.find(input => input.name === "Hover" && input.type === "trigger");
+
+        if (hoverTrigger) {
+          canvas.addEventListener("mouseenter", () => {
+            hoverTrigger.fire();
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
