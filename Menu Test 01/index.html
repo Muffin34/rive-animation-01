@@ -7,53 +7,49 @@
   <style>
     html, body {
       margin: 0; padding: 0;
-      background: #1a1a1a;            /* page background behind the canvas */
+      background: #1a1a1a;
       display: flex; align-items: center; justify-content: center;
       height: 100vh;
     }
     #Main {
-      /* CSS viewport size */
       width: 1920px;
       height: 1080px;
-      background: #ffffff;            /* canvas background */
-      cursor: pointer;
+      background: transparent;
       display: block;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <canvas id="Main"></canvas>
 
+  <!-- Rive runtime -->
   <script src="https://unpkg.com/@rive-app/canvas@2.30.1/rive.js"></script>
   <script>
     const canvas = document.getElementById('Main');
     const ctx    = canvas.getContext('2d');
     const dpr    = window.devicePixelRatio || 1;
 
-    // 1) Upscale internal buffer for crisp vectors
+    // Upscale buffer for crisp vector rendering
     canvas.width  = 1920 * dpr;
     canvas.height = 1080 * dpr;
     canvas.style.width  = '1920px';
     canvas.style.height = '1080px';
     ctx.scale(dpr, dpr);
 
-    // 2) Load the Rive file with interactivity
-    const riveInstance = new rive.Rive({
-      src: encodeURI('menu_test 01.riv'),  // exact filename
+    // Load your Rive file
+    new rive.Rive({
+      src: 'menu_test_01.riv',      // exact filename
+      artboard: 'Main',             // your artboard name
       canvas: canvas,
       autoplay: true,
-      stateMachines: ['State Machine 1'],  // ← your SM name
+      antialias: true,              // ensure feathering
       layout: new rive.Layout({
-        fit:       rive.Fit.Fill,           // fills entire 1920×1080
+        fit:       rive.Fit.Contain,
         alignment: rive.Alignment.Center
       }),
-      onLoad: () => {
-        const inputs = riveInstance.stateMachineInputs('State Machine 1');
-        // find a trigger called 'Click' (or whatever your input is)
-        const trigger = inputs.find(i => i.type === 'trigger' && i.name === 'Click');
-        if (trigger) {
-          canvas.addEventListener('click', () => trigger.fire());
-        }
+      onError(err) {
+        console.error('Rive failed to load:', err);
       }
     });
   </script>
