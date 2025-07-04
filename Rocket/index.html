@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Rocket Rive Animation</title>
-  <script src="https://unpkg.com/rive-js@0.7.86"></script>
+  <!-- Correct latest Rive JS runtime -->
+  <script src="https://unpkg.com/@rive-app/canvas@2.11.1"></script>
   <style>
     body, html {
       margin: 0;
@@ -19,7 +20,7 @@
   <canvas id="rocketCanvas" width="781" height="781"></canvas>
 
   <script>
-    new rive.Rive({
+    new Rive({
       src: 'rocket.riv',
       canvas: document.getElementById('rocketCanvas'),
       artboard: 'Rocket',
