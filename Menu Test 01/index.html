@@ -3,49 +3,55 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Menu Test</title>
+  <title>Menu Test 01</title>
   <style>
     html, body {
       margin: 0; padding: 0;
-      background: transparent;
-      display: flex; align-items: center; justify-content: center;
+      background: #000;           /* or transparent */
+      display: flex;
+      align-items: center;
+      justify-content: center;
       height: 100vh;
     }
     #Main {
+      /* CSS size = what you see */
       width: 1920px;
       height: 1080px;
       cursor: pointer;
-      /* ensure the canvas itself is crisp on high-dpi screens */
-      image-rendering: auto;
     }
   </style>
 </head>
 <body>
-  <canvas id="Main" width="1920" height="1080"></canvas>
+  <canvas id="Main"></canvas>
 
-  <script src="https://unpkg.com/@rive-app/canvas@2.11.1/rive.js"></script>
+  <!-- high-level canvas runtime -->
+  <script src="https://unpkg.com/@rive-app/canvas@2.30.1/rive.js"></script>
   <script>
-    // Make sure your .riv file sits next to this HTML,
-    // exactly named "menu_test 01.riv"
-    const rivFile = encodeURI("menu_test 01.riv");
-    const canvas = document.getElementById("Main");
+    const canvas = document.getElementById('Main');
+    const ctx   = canvas.getContext('2d');
+    const dpr   = window.devicePixelRatio || 1;
 
-    // Create a high-dpi, antialiased renderer
-    const renderer = new rive.CanvasRenderer(canvas, {
-      antialias: true,
-      dpr: window.devicePixelRatio
-    });
+    // 1) Upscale the drawing buffer
+    canvas.width  = 1920 * dpr;
+    canvas.height = 1080 * dpr;
 
-    // Load and play your Rive file
+    // 2) Keep CSS at 1920×1080
+    canvas.style.width  = '1920px';
+    canvas.style.height = '1080px';
+
+    // 3) Make sure all draw ops are DPI-aware
+    ctx.scale(dpr, dpr);
+
+    // 4) Fire up Rive
     new rive.Rive({
-      src: rivFile,
-      renderer,
+      src: 'menu_test 01.riv',     // must match your file name exactly
+      canvas: canvas,
       autoplay: true,
       layout: new rive.Layout({
-        fit: rive.Fit.Contain,         // scales your artboard inside 1920×1080
+        fit:       rive.Fit.Contain,   // scale to fit inside 1920×1080
         alignment: rive.Alignment.Center
-      })
-      // (you can add `stateMachines: [...]` here if your file has them)
+      }),
+      /* stateMachines: [...],   // add this if you have interactivity */
     });
   </script>
 </body>
