@@ -3,105 +3,89 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Interactive Menu Test</title>
+  <title>Menu Test 01</title>
   <style>
     html, body {
       margin: 0; padding: 0;
       background: #1a1a1a;
+      display: flex; justify-content: center; align-items: center;
       height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     canvas {
+      /* what you actually see */
       width: 1920px;
       height: 1080px;
-      background: #e38a2a; /* match your orange bg or use transparent */
+      background: #e38a2a;   /* match your orange fill */
       cursor: pointer;
       display: block;
     }
   </style>
 </head>
 <body>
-  <canvas id="Main"></canvas>
+  <canvas id="riveCanvas"></canvas>
+
+  <!-- Rive Canvas runtime -->
   <script src="https://unpkg.com/@rive-app/canvas@2.30.1/rive.js"></script>
   <script>
-    const canvas = document.getElementById('Main');
-    const ctx    = canvas.getContext('2d');
+    const canvas = document.getElementById("riveCanvas");
+    const ctx    = canvas.getContext("2d");
     const dpr    = window.devicePixelRatio || 1;
 
-    // Upscale for crisp vectors
+    // 1) scale the drawing buffer for crisp vectors:
     canvas.width  = 1920 * dpr;
     canvas.height = 1080 * dpr;
     canvas.style.width  = '1920px';
     canvas.style.height = '1080px';
     ctx.scale(dpr, dpr);
 
-    // Menu items & state‐machine triggers
-    const menuItems = [
-      'Continue',
-      'Start Game',
-      'Load Game',
-      'Settings',
-      'Exit'
-    ];
+    let riveInstance, triggers;
 
-    let riveInstance, triggersMap;
-
+    // 2) load the Main artboard (which instantiates Menu Text + Menu Items)
     new rive.Rive({
-      src: encodeURI('menu_test_01.riv'),   // your file
-      artboard: 'Main',                     // your artboard name
-      canvas,
-      autoplay: true,
+      src:       encodeURI('menu_test_01.riv'),
+      artboard:  'Main',
+      canvas:    canvas,
+      autoplay:  true,
       antialias: true,
-      stateMachines: ['State Machine 1'],   // your SM name
+      stateMachines: ['State Machine 1'],
       layout: new rive.Layout({
         fit:       rive.Fit.Contain,
         alignment: rive.Alignment.Center
       }),
-      onLoad(inst) {
-        riveInstance = inst;
-        // Build a map: { "Continue": triggerInput, ... }
+      onLoad(instance) {
+        riveInstance = instance;
+        // map your five triggers by name
         const inputs = riveInstance.stateMachineInputs('State Machine 1');
-        triggersMap = {};
-        menuItems.forEach(name => {
-          const inp = inputs.find(i => i.name === name && i.type === 'trigger');
-          if (inp) triggersMap[name] = inp;
-        });
+        triggers = {
+          Continue:   inputs.find(i => i.name === 'Continue'   && i.type === 'trigger'),
+          'Start Game': inputs.find(i => i.name === 'Start Game' && i.type === 'trigger'),
+          'Load Game':  inputs.find(i => i.name === 'Load Game'  && i.type === 'trigger'),
+          Settings:  inputs.find(i => i.name === 'Settings'  && i.type === 'trigger'),
+          Exit:      inputs.find(i => i.name === 'Exit'      && i.type === 'trigger'),
+        };
       },
       onError(err) {
-        console.error('Rive load error:', err);
+        console.error('Rive failed to load:', err);
       }
     });
 
-    // Helper: find which item index (0–4) based on pointer Y
-    function hitIndex(clientY) {
-      const rect = canvas.getBoundingClientRect();
-      const relY = (clientY - rect.top) / rect.height; // 0–1
-      let idx = Math.floor(relY * menuItems.length);
-      if (idx < 0) idx = 0;
-      if (idx >= menuItems.length) idx = menuItems.length - 1;
-      return idx;
+    // 3) helper to turn Y into one of the five items
+    function whichItem(clientY) {
+      const { top, height } = canvas.getBoundingClientRect();
+      let t = (clientY - top) / height;
+      t = Math.min(Math.max(t, 0), 0.999);
+      return Math.floor(t * 5);
     }
+    const names = ['Continue','Start Game','Load Game','Settings','Exit'];
 
-    // On hover, fire the highlight trigger
-    canvas.addEventListener('mousemove', e => {
-      if (!triggersMap) return;
-      const idx = hitIndex(e.clientY);
-      const name = menuItems[idx];
-      const trig = triggersMap[name];
-      if (trig) trig.fire();
-    });
-
-    // On click, fire the same trigger (or you could fire a different one)
+    // 4) wire up click to fire the correct trigger
     canvas.addEventListener('click', e => {
-      if (!triggersMap) return;
-      const idx = hitIndex(e.clientY);
-      const name = menuItems[idx];
-      const trig = triggersMap[name];
+      if (!triggers) return;
+      const idx = whichItem(e.clientY);
+      const name = names[idx];
+      const trig = triggers[name];
       if (trig) trig.fire();
-      // TODO: also call your own JS handler, e.g. startGame(), etc.
-      console.log('Clicked menu item:', name);
+      console.log('Fired trigger for:', name);
     });
   </script>
 </body>
