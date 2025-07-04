@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rocket Rive Animation</title>
+  <script src="https://unpkg.com/rive-js@0.7.86"></script>
+  <style>
+    body, html {
+      margin: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="rocketCanvas" width="781" height="781"></canvas>
+
+  <script>
+    new rive.Rive({
+      src: 'rocket.riv',
+      canvas: document.getElementById('rocketCanvas'),
+      artboard: 'Rocket',
+      autoplay: true
+    });
+  </script>
+</body>
+</html>
