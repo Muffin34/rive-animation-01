@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Rocket Rive Animation</title>
-  <!-- Correct latest Rive JS runtime -->
-  <script src="https://unpkg.com/@rive-app/canvas@2.11.1"></script>
+  <!-- Load correct Rive runtime -->
+  <script src="https://unpkg.com/rive-canvas@2.7.0/rive.min.js"></script>
   <style>
     body, html {
       margin: 0;
+      padding: 0;
+      background: #111;
       height: 100%;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #111;
+    }
+
+    canvas {
+      border: 2px solid #444;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
     }
   </style>
 </head>
@@ -21,10 +28,10 @@
 
   <script>
     new Rive({
-      src: 'rocket.riv',
+      src: 'rocket.riv', // Make sure rocket.riv is in the same folder
       canvas: document.getElementById('rocketCanvas'),
-      artboard: 'Rocket',
-      autoplay: true
+      autoplay: true,
+      artboard: 'Rocket'
     });
   </script>
 </body>
