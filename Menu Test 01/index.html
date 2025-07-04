@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Menu Test</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      height: 100vh;
+    }
+    #Main {
+      width: 1920px;
+      height: 1080px;
+      cursor: pointer;
+      /* ensure the canvas itself is crisp on high-dpi screens */
+      image-rendering: auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="Main" width="1920" height="1080"></canvas>
+
+  <script src="https://unpkg.com/@rive-app/canvas@2.11.1/rive.js"></script>
+  <script>
+    // Make sure your .riv file sits next to this HTML,
+    // exactly named "menu_test 01.riv"
+    const rivFile = encodeURI("menu_test 01.riv");
+    const canvas = document.getElementById("Main");
+
+    // Create a high-dpi, antialiased renderer
+    const renderer = new rive.CanvasRenderer(canvas, {
+      antialias: true,
+      dpr: window.devicePixelRatio
+    });
+
+    // Load and play your Rive file
+    new rive.Rive({
+      src: rivFile,
+      renderer,
+      autoplay: true,
+      layout: new rive.Layout({
+        fit: rive.Fit.Contain,         // scales your artboard inside 1920×1080
+        alignment: rive.Alignment.Center
+      })
+      // (you can add `stateMachines: [...]` here if your file has them)
+    });
+  </script>
+</body>
+</html>
